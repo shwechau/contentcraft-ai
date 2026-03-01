@@ -58,7 +58,7 @@ Agents communicate via **Redis**. The orchestrator runs Agent 2 in a background 
 ### 1. Clone and configure
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/shwechau/contentcraft-ai.git
 cd contentcraft-ai
 cp .env.example .env
 # Add your API keys to .env
