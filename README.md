@@ -6,6 +6,12 @@ Built for the **lablab.ai Hackathon** · Powered by GPT-4 + DALL-E 3
 
 ---
 
+## Live Demo
+
+**[shwechau.github.io/contentcraft-ai/complete-ui-interface.html](https://shwechau.github.io/contentcraft-ai/complete-ui-interface.html)**
+
+---
+
 ## What It Does
 
 Fill out one intake form with your brand details and topic. Two AI agents take it from there:
