@@ -1,0 +1,40 @@
+# Secrets — NEVER commit these
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+env/
+
+# Generated output
+output/
+*.zip
+validation-report.json
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# SSL certs (keep out of repo)
+nginx/ssl/
+
+# Large/unrelated files
+*.user.js
+XLRRRkCs47tdLqppKjcDrqs05cYm3TRD1J0sSOKumFOjOAInJOGYjIIrZhVeQp-Wdz1FsVvOXwGaKruN1G97cXldSkPGx9rrtBYcakmRjy4AePPSA6PVXAgvuHKKkggrGkMMRYSH31QEgxN4nEGN_PhpiXHg3JyaucEocJ5wUwifclYCy5EYkUhEwRLdtoVgXNQO-B5luURLeL5S0.png

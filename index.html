@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Content Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4ECDC4;
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .color-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-input {
+            width: 60px !important;
+            height: 50px;
+            border-radius: 10px;
+            border: 2px solid #e1e5e9;
+            cursor: pointer;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4ECDC4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-steps {
+            margin-top: 20px;
+        }
+
+        .progress-step {
+            padding: 8px 0;
+            color: #666;
+        }
+
+        .progress-step.active {
+            color: #4ECDC4;
+            font-weight: bold;
+        }
+
+        .progress-step.completed {
+            color: #28a745;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 YouTube Content Generator</h1>
+            <p>Create complete social media packs with AI-powered content and visuals</p>
+        </div>
+
+        <div class="form-container">
+            <form id="contentForm">
+                <div class="form-group">
+                    <label for="brand_name">Brand Name *</label>
+                    <input type="text" id="brand_name" name="brand_name" required 
+                           placeholder="e.g., TechReviews Pro, Cooking with Sarah">
+                </div>
+
+                <div class="form-group">
+                    <label for="topic">Video Topic *</label>
+                    <input type="text" id="topic" name="topic" required 
+                           placeholder="e.g., iPhone 15 Review, Easy Pasta Recipe, Morning Routine">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tone">Content Tone *</label>
+                        <select id="tone" name="tone" required>
+                            <option value="">Select tone...</option>
+                            <option value="professional">Professional</option>
+                            <option value="casual">Casual & Friendly</option>
+                            <option value="energetic">Energetic & Fun</option>
+                            <option value="educational">Educational</option>
+                            <option value="inspirational">Inspirational</option>
+                            <option value="humorous">Humorous</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="video_length">Video Length</label>
+                        <select id="video_length" name="video_length">
+                            <option value="short">Short (1-3 minutes)</option>
+                            <option value="medium" selected>Medium (5-10 minutes)</option>
+                            <option value="long">Long (15+ minutes)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="target_audience">Target Audience</label>
+                    <input type="text" id="target_audience" name="target_audience" 
+                           placeholder="e.g., Tech enthusiasts, Cooking beginners, Fitness lovers">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="brand_colors">Brand Colors</label>
+                        <div class="color-input-group">
+                            <input type="color" id="brand_color1" name="brand_color1" value="#FF6B6B" class="color-input">
+                            <input type="color" id="brand_color2" name="brand_color2" value="#4ECDC4" class="color-input">
+                            <input type="text" id="brand_colors" name="brand_colors" 
+                                   placeholder="Or enter hex codes: #FF6B6B, #4ECDC4">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="style_preference">Visual Style</label>
+                        <select id="style_preference" name="style_preference">
+                            <option value="modern">Modern & Clean</option>
+                            <option value="bold">Bold & Vibrant</option>
+                            <option value="minimal">Minimal & Simple</option>
+                            <option value="playful">Playful & Creative</option>
+                            <option value="professional">Professional & Corporate</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="additional_notes">Additional Notes</label>
+                    <textarea id="additional_notes" name="additional_notes" 
+                              placeholder="Any specific requirements, keywords to include, or style preferences..."></textarea>
+                </div>
+
+                <button type="submit" class="generate-btn" id="generateBtn">
+                    🚀 Generate Complete Social Media Pack
+                </button>
+
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="successMessage"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Creating Your Social Media Pack</h3>
+            <p>This may take 30-60 seconds...</p>
+            
+            <div class="progress-steps">
+                <div class="progress-step" id="step1">📝 Generating content...</div>
+                <div class="progress-step" id="step2">🎨 Creating visuals...</div>
+                <div class="progress-step" id="step3">📦 Assembling pack...</div>
+                <div class="progress-step" id="step4">✅ Finalizing...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update brand colors when color inputs change
+        document.getElementById('brand_color1').addEventListener('change', updateBrandColors);
+        document.getElementById('brand_color2').addEventListener('change', updateBrandColors);
+
+        function updateBrandColors() {
+            const color1 = document.getElementById('brand_color1').value;
+            const color2 = document.getElementById('brand_color2').value;
+            document.getElementById('brand_colors').value = `${color1}, ${color2}`;
+        }
+
+        // Initialize brand colors
+        updateBrandColors();
+
+        // Form submission
+        document.getElementById('contentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Show loading overlay
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/generate-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Redirect to pack viewer
+                    window.location.href = `/pack/${result.pack_id}`;
+                } else {
+                    hideLoading();
+                    showError(result.error || 'Generation failed. Please try again.');
+                }
+                
+            } catch (error) {
+                hideLoading();
+                showError('Network error. Please check your connection and try again.');
+                console.error('Error:', error);
+            }
+        });
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('generateBtn').disabled = true;
+            
+            // Simulate progress steps
+            setTimeout(() => updateStep('step1', 'active'), 500);
+            setTimeout(() => updateStep('step1', 'completed'), 15000);
+            setTimeout(() => updateStep('step2', 'active'), 15000);
+            setTimeout(() => updateStep('step2', 'completed'), 30000);
+            setTimeout(() => updateStep('step3', 'active'), 30000);
+            setTimeout(() => updateStep('step3', 'completed'), 45000);
+            setTimeout(() => updateStep('step4', 'active'), 45000);
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('generateBtn').disabled = false;
+            
+            // Reset progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.className = 'progress-step';
+            });
+        }
+
+        function updateStep(stepId, status) {
+            const step = document.getElementById(stepId);
+            step.className = `progress-step ${status}`;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

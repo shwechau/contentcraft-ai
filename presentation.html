@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContentCraft AI — lablab.ai Hackathon Presentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0f0f0f;
+    color: #fff;
+  }
+
+  /* ── Slide base ── */
+  .slide {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    page-break-after: always;
+    margin-bottom: 4px;
+  }
+
+  /* ── Color palette ── */
+  :root {
+    --red:    #FF4444;
+    --orange: #FF8C00;
+    --blue:   #1A73E8;
+    --dark:   #0f0f0f;
+    --card:   #1a1a2e;
+    --accent: #667eea;
+  }
+
+  /* ── Slide themes ── */
+  .slide-title      { background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%); }
+  .slide-problem    { background: linear-gradient(135deg, #1a0a0a 0%, #2d1010 100%); }
+  .slide-solution   { background: linear-gradient(135deg, #0a1a0a 0%, #102d10 100%); }
+  .slide-how        { background: linear-gradient(135deg, #0a0a1a 0%, #10102d 100%); }
+  .slide-tech       { background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%); }
+  .slide-market     { background: linear-gradient(135deg, #1a0a1a 0%, #2d102d 100%); }
+  .slide-revenue    { background: linear-gradient(135deg, #0a1a10 0%, #102d1a 100%); }
+  .slide-compete    { background: linear-gradient(135deg, #1a1a0a 0%, #2d2d10 100%); }
+  .slide-roadmap    { background: linear-gradient(135deg, #0a0f1a 0%, #10182d 100%); }
+  .slide-cta        { background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%); }
+
+  /* ── Decorative bar ── */
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--red), var(--orange), var(--accent), var(--blue));
+  }
+
+  /* ── Slide number ── */
+  .slide-num {
+    position: absolute;
+    bottom: 24px; right: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+  }
+
+  /* ── Brand badge ── */
+  .brand {
+    position: absolute;
+    top: 22px; right: 40px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* ── Typography ── */
+  h1 { font-size: 62px; font-weight: 800; line-height: 1.1; }
+  h2 { font-size: 42px; font-weight: 700; margin-bottom: 32px; }
+  h3 { font-size: 22px; font-weight: 600; }
+  p, li { font-size: 18px; line-height: 1.7; color: rgba(255,255,255,0.82); }
+
+  .tag {
+    display: inline-block;
+    background: rgba(102,126,234,0.25);
+    border: 1px solid rgba(102,126,234,0.5);
+    color: #a5b4fc;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .highlight { color: #667eea; }
+  .highlight-red { color: #FF6B6B; }
+  .highlight-green { color: #51CF66; }
+  .highlight-orange { color: #FFB347; }
+
+  /* ── Grid layouts ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
+
+  /* ── Cards ── */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+
+  .card-red    { border-color: rgba(255,68,68,0.4);   background: rgba(255,68,68,0.08); }
+  .card-blue   { border-color: rgba(26,115,232,0.4);  background: rgba(26,115,232,0.08); }
+  .card-green  { border-color: rgba(81,207,102,0.4);  background: rgba(81,207,102,0.08); }
+  .card-purple { border-color: rgba(102,126,234,0.4); background: rgba(102,126,234,0.08); }
+  .card-orange { border-color: rgba(255,140,0,0.4);   background: rgba(255,140,0,0.08); }
+
+  .stat {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Pipeline diagram ── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 8px;
+  }
+
+  .pipe-box {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 18px 22px;
+    text-align: center;
+    flex: 1;
+  }
+
+  .pipe-box .icon { font-size: 28px; margin-bottom: 8px; }
+  .pipe-box .label { font-size: 13px; font-weight: 700; color: #fff; }
+  .pipe-box .sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  .pipe-arrow {
+    font-size: 22px;
+    color: rgba(255,255,255,0.3);
+    padding: 0 10px;
+    flex-shrink: 0;
+  }
+
+  /* ── Bullet list ── */
+  ul { list-style: none; }
+  ul li { padding: 8px 0; padding-left: 24px; position: relative; }
+  ul li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+
+  /* ── Tech pill ── */
+  .pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 6px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ── Competitor table ── */
+  .comp-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .comp-table th {
+    background: rgba(255,255,255,0.08);
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.6);
+  }
+  .comp-table td {
+    padding: 12px 16px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.82);
+  }
+  .comp-table tr.us td { background: rgba(102,126,234,0.12); color: #fff; font-weight: 600; }
+  .check { color: #51CF66; }
+  .cross { color: #FF6B6B; }
+  .partial { color: #FFB347; }
+
+  /* ── Timeline ── */
+  .timeline { display: flex; gap: 16px; margin-top: 8px; }
+  .tl-item {
+    flex: 1;
+    border-left: 3px solid rgba(102,126,234,0.4);
+    padding-left: 16px;
+  }
+  .tl-item.done { border-color: #51CF66; }
+  .tl-item.now  { border-color: #FFB347; }
+  .tl-phase { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+  .tl-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .tl-desc  { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+  .badge-done { color: #51CF66; font-size: 11px; font-weight: 700; }
+  .badge-now  { color: #FFB347; font-size: 11px; font-weight: 700; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: white; }
+    .slide { margin-bottom: 0; page-break-after: always; }
+    @page { size: 1280px 720px; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 1 — TITLE
+══════════════════════════════════════════════ -->
+<div class="slide slide-title">
+  <div class="top-bar"></div>
+  <div class="brand">lablab.ai Hackathon</div>
+
+  <div style="max-width: 820px;">
+    <div class="tag">🤖 Dual-Agent AI Platform</div>
+    <h1 style="margin-bottom: 20px;">
+      <span class="highlight">ContentCraft</span> AI
+    </h1>
+    <p style="font-size: 26px; color: rgba(255,255,255,0.75); margin-bottom: 36px; line-height: 1.4;">
+      From brand brief to complete YouTube content pack in seconds —<br>
+      title, script, description, hashtags, and thumbnails, all AI-generated.
+    </p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <span class="pill">GPT-4</span>
+      <span class="pill">DALL-E 3</span>
+      <span class="pill">Python / Flask</span>
+      <span class="pill">Redis</span>
+      <span class="pill">Docker</span>
+    </div>
+  </div>
+
+  <!-- decorative circle -->
+  <div style="position:absolute; right:-80px; top:50%; transform:translateY(-50%);
+              width:500px; height:500px; border-radius:50%;
+              background: radial-gradient(circle, rgba(102,126,234,0.15) 0%, transparent 70%);
+              pointer-events:none;"></div>
+
+  <div class="slide-num">01 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 2 — PROBLEM
+══════════════════════════════════════════════ -->
+<div class="slide slide-problem">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag" style="background:rgba(255,68,68,0.15); border-color:rgba(255,68,68,0.4); color:#FF8A8A;">The Problem</div>
+  <h2>Creating YouTube content is <span class="highlight-red">expensive and slow</span></h2>
+
+  <div class="grid-3">
+    <div class="card card-red">
+      <div class="stat" style="color:#FF6B6B;">4–6h</div>
+      <div class="stat-label">Average time to produce<br>one YouTube video's content</div>
+    </div>
+    <div class="card card-red">
+      <div class="stat" style="color:#FF6B6B;">50M+</div>
+      <div class="stat-label">Content creators on YouTube<br>competing for attention</div>
+    </div>
+    <div class="card card-red">
+      <div class="stat" style="color:#FF6B6B;">3×</div>
+      <div class="stat-label">More likely to go viral with<br>optimised titles & thumbnails</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 28px;">
+    <ul>
+      <li>Creators juggle scriptwriting, SEO, thumbnail design, and hashtag research — across separate tools</li>
+      <li>Small businesses can't afford dedicated content teams or design agencies</li>
+      <li>Inconsistent brand voice across videos hurts long-term channel growth</li>
+    </ul>
+  </div>
+
+  <div class="slide-num">02 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 3 — SOLUTION
+══════════════════════════════════════════════ -->
+<div class="slide slide-solution">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag" style="background:rgba(81,207,102,0.15); border-color:rgba(81,207,102,0.4); color:#8AE89E;">Our Solution</div>
+  <h2>One form. Two AI agents. <span class="highlight-green">Complete content pack.</span></h2>
+
+  <div class="grid-2" style="align-items: start;">
+    <div>
+      <ul>
+        <li><strong>Fill one intake form</strong> — brand name, topic, tone, audience</li>
+        <li><strong>Agent 1 (GPT-4)</strong> generates title, full script, description & hashtags</li>
+        <li><strong>Agent 2 (DALL-E 3 + Pillow)</strong> creates 3 thumbnail variants</li>
+        <li><strong>Download a ZIP pack</strong> — ready to upload to YouTube</li>
+        <li>Brand voice stays <strong>consistent</strong> across every output</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card card-green" style="margin-bottom: 16px;">
+        <h3 style="color:#51CF66; margin-bottom: 8px;">Before ContentCraft AI</h3>
+        <p style="font-size: 15px;">4–6 hours | 4 separate tools | Inconsistent quality</p>
+      </div>
+      <div class="card card-green">
+        <h3 style="color:#51CF66; margin-bottom: 8px;">After ContentCraft AI</h3>
+        <p style="font-size: 15px;">Under 60 seconds | 1 form | Consistent brand voice</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-num">03 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 4 — HOW IT WORKS
+══════════════════════════════════════════════ -->
+<div class="slide slide-how">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag">How It Works</div>
+  <h2>Dual-agent pipeline in <span class="highlight">5 steps</span></h2>
+
+  <div class="pipeline">
+    <div class="pipe-box" style="border-color:rgba(102,126,234,0.4); background:rgba(102,126,234,0.1);">
+      <div class="icon">📋</div>
+      <div class="label">Intake Form</div>
+      <div class="sub">Brand · Topic · Tone · Audience · Colors</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="border-color:rgba(26,115,232,0.5); background:rgba(26,115,232,0.1);">
+      <div class="icon">🤖</div>
+      <div class="label">Agent 1</div>
+      <div class="sub">GPT-4 · Title · Script · Description · Hashtags</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="border-color:rgba(255,140,0,0.5); background:rgba(255,140,0,0.1);">
+      <div class="icon">🎨</div>
+      <div class="label">Agent 2</div>
+      <div class="sub">DALL-E 3 · 3 Thumbnail Variants · Brand Colors</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="border-color:rgba(81,207,102,0.5); background:rgba(81,207,102,0.1);">
+      <div class="icon">📦</div>
+      <div class="label">Pack Assembler</div>
+      <div class="sub">ZIP bundle · Optimization tips · Checklist</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="border-color:rgba(255,68,68,0.5); background:rgba(255,68,68,0.1);">
+      <div class="icon">⬇️</div>
+      <div class="label">Download</div>
+      <div class="sub">Complete YouTube-ready content pack</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top: 28px;">
+    <div class="card">
+      <h3 style="margin-bottom: 10px; color: #a5b4fc;">Agent Coordination</h3>
+      <p style="font-size: 15px;">Agents communicate via <strong>Redis</strong>. Agent 1 stores output, Orchestrator triggers Agent 2 with the job ID. Results assembled in a background thread.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 10px; color: #a5b4fc;">Infrastructure</h3>
+      <p style="font-size: 15px;">Flask API · Gunicorn (4 workers) · Nginx reverse proxy · Docker Compose · Rate limiting on /api/generate (2 req/s)</p>
+    </div>
+  </div>
+
+  <div class="slide-num">04 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 5 — TECH STACK
+══════════════════════════════════════════════ -->
+<div class="slide slide-tech">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag">Technology Stack</div>
+  <h2>Built for <span class="highlight">speed, reliability</span> and scale</h2>
+
+  <div class="grid-4" style="margin-top: 8px;">
+    <div class="card card-blue">
+      <h3 style="color:#7BB3FF; margin-bottom: 14px;">AI Layer</h3>
+      <ul style="font-size:14px;">
+        <li style="padding:5px 0 5px 20px;">GPT-4 — content generation</li>
+        <li style="padding:5px 0 5px 20px;">DALL-E 3 — AI thumbnails</li>
+        <li style="padding:5px 0 5px 20px;">Pillow — programmatic thumbnails</li>
+      </ul>
+    </div>
+    <div class="card card-purple">
+      <h3 style="color:#a5b4fc; margin-bottom: 14px;">Backend</h3>
+      <ul style="font-size:14px;">
+        <li style="padding:5px 0 5px 20px;">Python 3.11</li>
+        <li style="padding:5px 0 5px 20px;">Flask + Flask-CORS</li>
+        <li style="padding:5px 0 5px 20px;">Gunicorn (production)</li>
+      </ul>
+    </div>
+    <div class="card card-orange">
+      <h3 style="color:#FFB347; margin-bottom: 14px;">Data & Messaging</h3>
+      <ul style="font-size:14px;">
+        <li style="padding:5px 0 5px 20px;">Redis — job state store</li>
+        <li style="padding:5px 0 5px 20px;">Redis pub/sub — agent signalling</li>
+        <li style="padding:5px 0 5px 20px;">1-hour TTL on all jobs</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3 style="color:#51CF66; margin-bottom: 14px;">DevOps</h3>
+      <ul style="font-size:14px;">
+        <li style="padding:5px 0 5px 20px;">Docker + Compose</li>
+        <li style="padding:5px 0 5px 20px;">Nginx (SSL + rate limit)</li>
+        <li style="padding:5px 0 5px 20px;">Automated validation suite</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 28px; text-align: center;">
+    <span class="pill">openai==1.12.0</span>
+    <span class="pill">flask==2.3.3</span>
+    <span class="pill">redis==5.0.1</span>
+    <span class="pill">Pillow==10.2.0</span>
+    <span class="pill">gunicorn</span>
+    <span class="pill">aiohttp</span>
+  </div>
+
+  <div class="slide-num">05 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 6 — MARKET OPPORTUNITY
+══════════════════════════════════════════════ -->
+<div class="slide slide-market">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag" style="background:rgba(168,85,247,0.15); border-color:rgba(168,85,247,0.4); color:#c4b5fd;">Market Opportunity</div>
+  <h2>A <span class="highlight">massive and growing</span> addressable market</h2>
+
+  <div class="grid-3">
+    <div class="card" style="border-color:rgba(168,85,247,0.3); background:rgba(168,85,247,0.08); text-align:center;">
+      <div class="stat" style="color:#c4b5fd;">$47B</div>
+      <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:6px;">TAM</div>
+      <div class="stat-label">Global creator economy market by 2027</div>
+    </div>
+    <div class="card" style="border-color:rgba(102,126,234,0.4); background:rgba(102,126,234,0.1); text-align:center;">
+      <div class="stat" style="color:#a5b4fc;">$8B</div>
+      <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:6px;">SAM</div>
+      <div class="stat-label">AI content creation tools market (YouTube focus)</div>
+    </div>
+    <div class="card" style="border-color:rgba(26,115,232,0.4); background:rgba(26,115,232,0.1); text-align:center;">
+      <div class="stat" style="color:#7BB3FF;">$400M</div>
+      <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:6px;">SOM</div>
+      <div class="stat-label">Realistic 5-year capture at 5% SAM</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top: 24px;">
+    <div class="card">
+      <h3 style="margin-bottom: 10px;">Who needs this?</h3>
+      <ul style="font-size:15px;">
+        <li>50M+ YouTube content creators worldwide</li>
+        <li>Marketing teams managing brand YouTube channels</li>
+        <li>Small businesses with no content team</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 10px;">Why now?</h3>
+      <ul style="font-size:15px;">
+        <li>GPT-4 and DALL-E 3 now cost-effective at scale</li>
+        <li>YouTube Shorts driving demand for faster content cycles</li>
+        <li>Creator burnout at all-time high — tools that save time win</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slide-num">06 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 7 — REVENUE
+══════════════════════════════════════════════ -->
+<div class="slide slide-revenue">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag" style="background:rgba(81,207,102,0.15); border-color:rgba(81,207,102,0.4); color:#8AE89E;">Business Model</div>
+  <h2>Freemium SaaS with <span class="highlight-green">clear upgrade triggers</span></h2>
+
+  <div class="grid-3">
+    <div class="card">
+      <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 12px;">Free Tier</div>
+      <div class="stat" style="font-size: 36px; color: #fff; margin-bottom: 8px;">$0</div>
+      <ul style="font-size: 14px;">
+        <li>5 content packs / month</li>
+        <li>Text-based thumbnails only</li>
+        <li>Standard templates</li>
+        <li>Watermarked outputs</li>
+      </ul>
+      <div style="margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.4);">Acquisition channel</div>
+    </div>
+    <div class="card card-purple">
+      <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #a5b4fc; margin-bottom: 12px;">Pro — Most Popular</div>
+      <div class="stat" style="font-size: 36px; color: #a5b4fc; margin-bottom: 8px;">$29<span style="font-size:16px;">/mo</span></div>
+      <ul style="font-size: 14px;">
+        <li>Unlimited packs</li>
+        <li>DALL-E 3 AI thumbnails</li>
+        <li>All 3 thumbnail variants</li>
+        <li>No watermarks</li>
+      </ul>
+      <div style="margin-top: 14px; font-size: 13px; color: #a5b4fc;">Primary revenue driver</div>
+    </div>
+    <div class="card card-orange">
+      <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #FFB347; margin-bottom: 12px;">Agency</div>
+      <div class="stat" style="font-size: 36px; color: #FFB347; margin-bottom: 8px;">$99<span style="font-size:16px;">/mo</span></div>
+      <ul style="font-size: 14px;">
+        <li>10 brand profiles</li>
+        <li>Team collaboration</li>
+        <li>API access</li>
+        <li>Priority support</li>
+      </ul>
+      <div style="margin-top: 14px; font-size: 13px; color: #FFB347;">High-value B2B segment</div>
+    </div>
+  </div>
+
+  <div class="slide-num">07 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 8 — COMPETITIVE LANDSCAPE
+══════════════════════════════════════════════ -->
+<div class="slide slide-compete">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag" style="background:rgba(255,193,7,0.12); border-color:rgba(255,193,7,0.4); color:#FFD666;">Competitive Landscape</div>
+  <h2>We're the only <span class="highlight-orange">end-to-end</span> YouTube content pipeline</h2>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Script / Title</th>
+        <th>AI Thumbnails</th>
+        <th>Hashtags</th>
+        <th>One-click Pack</th>
+        <th>Brand Voice</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="us">
+        <td>✨ ContentCraft AI (Us)</td>
+        <td class="check">✔ GPT-4</td>
+        <td class="check">✔ DALL-E 3</td>
+        <td class="check">✔ Auto-generated</td>
+        <td class="check">✔ ZIP download</td>
+        <td class="check">✔ Consistent</td>
+      </tr>
+      <tr>
+        <td>Jasper.ai</td>
+        <td class="check">✔</td>
+        <td class="cross">✗</td>
+        <td class="partial">⚡ Basic</td>
+        <td class="cross">✗</td>
+        <td class="partial">⚡ Partial</td>
+      </tr>
+      <tr>
+        <td>Canva Magic</td>
+        <td class="cross">✗</td>
+        <td class="check">✔</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+        <td class="partial">⚡ Templates</td>
+      </tr>
+      <tr>
+        <td>VidIQ</td>
+        <td class="partial">⚡ Ideas only</td>
+        <td class="cross">✗</td>
+        <td class="check">✔ Analytics</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+      </tr>
+      <tr>
+        <td>ChatGPT (manual)</td>
+        <td class="check">✔</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="slide-num">08 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 9 — ROADMAP
+══════════════════════════════════════════════ -->
+<div class="slide slide-roadmap">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div class="tag">Roadmap</div>
+  <h2>5 days built. <span class="highlight">Big plans ahead.</span></h2>
+
+  <div class="timeline">
+    <div class="tl-item done">
+      <div class="tl-phase">Hackathon MVP <span class="badge-done">✔ Done</span></div>
+      <div class="tl-title">YouTube Content Pipeline</div>
+      <div class="tl-desc">Dual-agent system · GPT-4 script generation · DALL-E 3 thumbnails · ZIP pack download · Docker deployment</div>
+    </div>
+    <div class="tl-item now">
+      <div class="tl-phase">Phase 2 <span class="badge-now">Next</span></div>
+      <div class="tl-title">Platform Expansion</div>
+      <div class="tl-desc">Instagram Reels & TikTok formats · Real-time hashtag API · User accounts & saved packs · Streamlit public demo</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-phase">Phase 3</div>
+      <div class="tl-title">Intelligence Layer</div>
+      <div class="tl-desc">Real YouTube API hashtag trends · A/B thumbnail scoring · Content performance analytics · Channel history awareness</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-phase">Phase 4</div>
+      <div class="tl-title">Scale & Monetise</div>
+      <div class="tl-desc">Celery async queue · Multi-tenant agency dashboard · API product for third-party integrations · Revenue launch</div>
+    </div>
+  </div>
+
+  <div class="slide-num">09 / 10</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 10 — CTA
+══════════════════════════════════════════════ -->
+<div class="slide slide-cta">
+  <div class="top-bar"></div>
+  <div class="brand">ContentCraft AI</div>
+
+  <div style="text-align: center; max-width: 900px; margin: 0 auto;">
+    <div class="tag">🚀 Try It Now</div>
+    <h1 style="margin-bottom: 24px;">
+      Stop spending hours.<br>
+      <span class="highlight">Start creating in seconds.</span>
+    </h1>
+    <p style="font-size: 22px; color: rgba(255,255,255,0.7); margin-bottom: 48px;">
+      ContentCraft AI — the first dual-agent platform that takes you<br>
+      from brand brief to complete YouTube pack, instantly.
+    </p>
+
+    <div class="grid-3" style="margin-bottom: 40px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">📺</div>
+        <div style="font-size: 14px; font-weight: 600;">Demo Video</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">See the full pipeline live</div>
+      </div>
+      <div class="card card-purple" style="text-align:center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">💻</div>
+        <div style="font-size: 14px; font-weight: 600;">GitHub Repository</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">Full source code · MIT License</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">⚡</div>
+        <div style="font-size: 14px; font-weight: 600;">Live Demo</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">Try it with your own brand</div>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+      <span class="pill">GPT-4 powered</span>
+      <span class="pill">DALL-E 3 thumbnails</span>
+      <span class="pill">Under 60 seconds</span>
+      <span class="pill">Open source</span>
+    </div>
+  </div>
+
+  <!-- decorative gradient orbs -->
+  <div style="position:absolute; left:-100px; bottom:-100px; width:400px; height:400px; border-radius:50%;
+              background: radial-gradient(circle, rgba(255,68,68,0.1) 0%, transparent 70%); pointer-events:none;"></div>
+  <div style="position:absolute; right:-100px; top:-100px; width:400px; height:400px; border-radius:50%;
+              background: radial-gradient(circle, rgba(26,115,232,0.1) 0%, transparent 70%); pointer-events:none;"></div>
+
+  <div class="slide-num">10 / 10</div>
+</div>
+
+</body>
+</html>
